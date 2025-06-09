@@ -63,7 +63,6 @@ class _EditJadwalState extends State<EditJadwal> {
   void _showRepeatPicker() async {
     // Tampilkan bottomsheet multi-select hari
     List<String> tempSelected = List.from(repeatDays);
-    bool isSetiapHari = tempSelected.length == 7;
 
     await showModalBottomSheet(
       context: context,

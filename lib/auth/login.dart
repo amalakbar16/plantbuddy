@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // Check for admin credentials
       if (_emailController.text == "admin@gmail.com" &&
-          _passwordController.text == "admin1") {
+          _passwordController.text == "Admin123") {
         setState(() {
           _isLoading = false;
         });
@@ -348,9 +348,6 @@ Widget build(BuildContext context) {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Kata sandi harus diisi';
-                            }
-                            if (value.length < 6) {
-                              return 'Kata sandi minimal 6 karakter';
                             }
                             return null;
                           },

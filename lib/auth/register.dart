@@ -30,101 +30,162 @@ class _RegisterPageState extends State<RegisterPage> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    // Header Image
-                    Container(
-                      width: screenSize.width,
-                      height: screenSize.height * 0.4,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/login_image.png'),
-                          fit: BoxFit.cover,
-                        ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                      ),
-                    ),
-                      ),
-                    ),
-                    // Back Button
-                    Positioned(
-                      left: 16,
-                      top: 16,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Color(0xFF00B761)),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => const LoginPage()),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+      backgroundColor: const Color(0xFFF9FDF9),
+      body: Column(
+        children: [
+          // Header Image
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: screenSize.height * 0.4, // Boleh adjust sesuai selera
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(32),
+                    bottomRight: Radius.circular(32),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/login_image.png'),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
                 ),
-                // Title Text
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.02),
-                  child: Text(
-                    'Isi data diri anda',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.50,
+              ),
+              // Back Button
+              Positioned(
+                left: 16,
+                top: 50,
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 5,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(24),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginPage()),
+                      );
+                    },
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFF01B14E),
+                          width: 1.3,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0x2201B14E),
+                            blurRadius: 7,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: Color(0xFF01B14E),
+                        size: 26,
+                      ),
                     ),
                   ),
                 ),
-                // Form Fields
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.06),
+              ),
+            ],
+          ),
+          // Form Card (tidak di-scroll)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 22.0,
+                vertical: 8,
+              ),
+              child: Container(
+                width: double.infinity,
+                height: 500,
+                margin: const EdgeInsets.only(top: 14),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenSize.width * 0.06,
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x2200B761),
+                      blurRadius: 18,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Form(
+                  key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment:
+                        MainAxisAlignment
+                            .center, // Tengah secara vertikal di card
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      // Name Label
-                      Text(
-                        'Nama Lengkap',
+                      const Text(
+                        'Isi data diri anda',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: const Color(0xFF7E7B7B),
-                          fontSize: 12,
-                          fontFamily: 'Work Sans',
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w700,
+                          letterSpacing: 0,
                         ),
                       ),
-                      SizedBox(height: 8),
-                      // Name Input
+                      const SizedBox(height: 18),
+                      // Nama Lengkap
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Nama Lengkap',
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: 13.5,
+                            fontFamily: 'Work Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 7),
                       TextFormField(
                         controller: _nameController,
+                        style: const TextStyle(fontSize: 15),
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 13,
+                          ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF01B14E),
+                              width: 1.7,
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Colors.grey[100],
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -133,39 +194,52 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      // Email Label
-                      Text(
-                        'Email',
-                        style: TextStyle(
-                          color: const Color(0xFF7E7B7B),
-                          fontSize: 12,
-                          fontFamily: 'Work Sans',
-                          fontWeight: FontWeight.w700,
+                      const SizedBox(height: 13),
+                      // Email
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Email',
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: 13.5,
+                            fontFamily: 'Work Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8),
-                      // Email Input
+                      const SizedBox(height: 7),
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(fontSize: 15),
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 13,
+                          ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF01B14E),
+                              width: 1.7,
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Colors.grey[100],
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -177,218 +251,272 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      // Password Label
-                      Text(
-                        'Kata Sandi',
-                        style: TextStyle(
-                          color: const Color(0xFF7E7B7B),
-                          fontSize: 12,
-                          fontFamily: 'Work Sans',
-                          fontWeight: FontWeight.w700,
+                      const SizedBox(height: 13),
+                      // Kata Sandi
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Kata Sandi',
+                          style: TextStyle(
+                            color: Colors.grey[800],
+                            fontSize: 13.5,
+                            fontFamily: 'Work Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8),
-                      // Password Input
+                      const SizedBox(height: 7),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
+                        style: const TextStyle(fontSize: 15),
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 13,
+                          ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.grey.withOpacity(0.24),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF01B14E),
+                              width: 1.7,
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.white,
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 8),
-                            child: IconButton(
-                              icon: Icon(
-                                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                color: const Color(0xFF7E7B7B),
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
+                          fillColor: Colors.grey[100],
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off_rounded
+                                  : Icons.visibility_rounded,
+                              color: Colors.grey[700],
+                              size: 22,
                             ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
                           ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Kata sandi harus diisi';
                           }
-                          if (value.length < 6) {
-                            return 'Kata sandi minimal 6 karakter';
+                          if (value.length < 8) {
+                            return 'Kata sandi minimal 8 karakter';
+                          }
+                          if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                            return 'Kata sandi harus mengandung huruf besar (A-Z)';
+                          }
+                          if (!RegExp(r'[a-z]').hasMatch(value)) {
+                            return 'Kata sandi harus mengandung huruf kecil (a-z)';
+                          }
+                          if (!RegExp(r'[0-9]').hasMatch(value)) {
+                            return 'Kata sandi harus mengandung angka (0-9)';
                           }
                           return null;
                         },
                       ),
-                      SizedBox(height: screenSize.height * 0.05),
+                      const SizedBox(height: 22),
                       // Register Button
-                      Center(
-                        child: SizedBox(
-                          width: screenSize.width * 0.64,
-                          height: 45,
-                          child: ElevatedButton(
-                            onPressed: _isLoading
-                                ? null
-                                : () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        _isLoading = true;
-                                      });
+                      SizedBox(
+  width: double.infinity,
+  height: 44,
+  child: ElevatedButton(
+    onPressed: _isLoading
+        ? null
+        : () async {
+            if (_formKey.currentState!.validate()) {
+              setState(() {
+                _isLoading = true;
+              });
 
-                                      try {
-                                        final authService = AuthService();
-                                        final result = await authService.register(
-                                          _nameController.text,
-                                          _emailController.text,
-                                          _passwordController.text,
-                                        );
+              try {
+                final authService = AuthService();
+                final result = await authService.register(
+                  _nameController.text,
+                  _emailController.text,
+                  _passwordController.text,
+                );
 
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
+                setState(() {
+                  _isLoading = false;
+                });
 
-                                        if (result['success']) {
-                                          if (!context.mounted) return;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(builder: (_) => const LoginPage()),
-                                          );
-                                        } else {
-                                          String errorMessage = result['error'] == 'email_exists'
-                                              ? 'Terjadi kesalahan saat registrasi. Silakan coba lagi.'
-                                              : 'Email sudah terdaftar, silakan gunakan email lain';
-
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Row(
-                                                children: [
-                                                  Icon(Icons.error_outline, color: Colors.white),
-                                                  SizedBox(width: 8),
-                                                  Expanded(child: Text(errorMessage)),
-                                                ],
-                                              ),
-                                              backgroundColor: Colors.red,
-                                              behavior: SnackBarBehavior.floating,
-                                              margin: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context).size.height - 150,
-                                                left: 20,
-                                                right: 20,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Row(
-                                              children: const [
-                                                Icon(Icons.error_outline, color: Colors.white),
-                                                SizedBox(width: 8),
-                                                Text('Terjadi kesalahan saat registrasi'),
-                                              ],
-                                            ),
-                                            backgroundColor: Colors.red,
-                                            behavior: SnackBarBehavior.floating,
-                                            margin: EdgeInsets.only(
-                                              bottom: MediaQuery.of(context).size.height - 150,
-                                              left: 20,
-                                              right: 20,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF01B14E),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: _isLoading
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text(
-                                    'Daftar',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                          ),
-                        ),
+                if (result['success']) {
+                  if (!context.mounted) return;
+                  // Tampilkan SnackBar sukses
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: const [
+                          Icon(Icons.check_circle_outline, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('Registrasi berhasil! Silakan login.'),
+                        ],
                       ),
-                      SizedBox(height: screenSize.height * 0.03),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height - 150,
+                        left: 20,
+                        right: 20,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                  // Delay agar user sempat baca pesan sukses
+                  await Future.delayed(const Duration(seconds: 1));
+                  if (!context.mounted) return;
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                } else {
+                  String errorMessage = result['error'] == 'email_exists'
+                      ? 'Terjadi kesalahan saat registrasi. Silakan coba lagi.'
+                      : 'Email sudah terdaftar, silakan gunakan email lain';
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(Icons.error_outline, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(errorMessage)),
+                        ],
+                      ),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height - 150,
+                        left: 20,
+                        right: 20,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                }
+              } catch (e) {
+                setState(() {
+                  _isLoading = false;
+                });
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(Icons.error_outline, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text('Terjadi kesalahan saat registrasi'),
+                      ],
+                    ),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height - 150,
+                      left: 20,
+                      right: 20,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                );
+              }
+            }
+          },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF01B14E),
+      disabledBackgroundColor: Colors.grey[300],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 1,
+    ),
+    child: _isLoading
+        ? const SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 2.6,
+            ),
+          )
+        : const Text(
+            'Daftar',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+  ),
+),
+
+                      const SizedBox(height: 10),
                       // Login Link
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Sudah punya akun? ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w600,
-                              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Sudah punya akun? ',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 13.7,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w500,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => const LoginPage()),
-                                );
-                              },
-                              child: Text(
-                                'Masuk',
-                                style: TextStyle(
-                                  color: const Color(0xFF01B14E),
-                                  fontSize: 13,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const LoginPage(),
                                 ),
+                              );
+                            },
+                            child: const Text(
+                              'Masuk',
+                              style: TextStyle(
+                                color: Color(0xFF01B14E),
+                                fontSize: 13.7,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w700,
+                                decoration: TextDecoration.underline,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
