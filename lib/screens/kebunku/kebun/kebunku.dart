@@ -636,7 +636,7 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation, secondaryAnimation) =>
-                              HomePage(userName: ''),
+                              HomePage(),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             var curve = CurvedAnimation(parent: animation, curve: Curves.easeInOut);
                             var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);

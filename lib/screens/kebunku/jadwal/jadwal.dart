@@ -378,7 +378,7 @@ class _JadwalState extends State<Jadwal> with SingleTickerProviderStateMixin {
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  HomePage(userName: ''),
+                                  HomePage(),
                           transitionDuration: Duration(milliseconds: 400),
                         ),
                       );

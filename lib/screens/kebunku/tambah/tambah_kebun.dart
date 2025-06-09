@@ -257,7 +257,7 @@ Align(
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  HomePage(userName: ''),
+                                  HomePage(),
                           transitionsBuilder: (
                             context,
                             animation,

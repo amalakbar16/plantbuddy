@@ -421,7 +421,7 @@ class _ArticlePageState extends State<ArticlePage> {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const HomePage(userName: ''),
+                          pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             var curve = CurvedAnimation(
                               parent: animation,

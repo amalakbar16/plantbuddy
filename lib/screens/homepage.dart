@@ -1,85 +1,103 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:plantbuddy/screens/article_page.dart';
 import 'package:plantbuddy/screens/profile.dart';
 import 'package:plantbuddy/screens/kebunku/kebun/kebunku.dart';
 
-class HomePage extends StatelessWidget {
-  final String userName;
-  
-  const HomePage({
-    super.key,
-    required this.userName,
-  });
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String? userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  void _loadUserName() async {
+    // Pastikan Hive sudah di-inisialisasi di main.dart
+    var box = await Hive.openBox('userBox');
+    setState(() {
+      userName = box.get('username', defaultValue: 'User');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
+      body: userName == null
+          ? Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 1612,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Stack(
+                SingleChildScrollView(
+                  child: Column(
                     children: [
-                      // Header section with user greeting
-                      Positioned(
-                        left: 30,
-                        top: 96,
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Hai,',
-                                style: TextStyle(
-                                  color: const Color(0xFF2E2E2E),
-                                  fontSize: 24,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 1612,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Stack(
+                          children: [
+                            // Header section with user greeting
+                            Positioned(
+                              left: 30,
+                              top: 96,
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Hai,',
+                                      style: TextStyle(
+                                        color: const Color(0xFF2E2E2E),
+                                        fontSize: 24,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' $userName',
+                                      style: TextStyle(
+                                        color: const Color(0xFF2E2E2E),
+                                        fontSize: 24,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' 👋',
+                                      style: TextStyle(
+                                        color: const Color(0xFF2E2E2E),
+                                        fontSize: 24,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              TextSpan(
-                                text: ' $userName',
+                            ),
+                            Positioned(
+                              left: 30,
+                              top: 134,
+                              child: Text(
+                                'Jelajahi Tumbuhan Anda!',
                                 style: TextStyle(
-                                  color: const Color(0xFF2E2E2E),
-                                  fontSize: 24,
+                                  color: const Color(0xFF888888),
+                                  fontSize: 14,
                                   fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.07,
                                 ),
                               ),
-                              TextSpan(
-                                text: ' 👋',
-                                style: TextStyle(
-                                  color: const Color(0xFF2E2E2E),
-                                  fontSize: 24,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                                          Positioned(
-                        left: 30,
-                        top: 134,
-                        child: Text(
-                          'Jelajahi Tumbuhan Anda!',
-                          style: TextStyle(
-                            color: const Color(0xFF888888),
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.07,
-                          ),
-                        ),
-                      ),
-
+                            ),
                       // Green section
                       Positioned(
                         left: -3,

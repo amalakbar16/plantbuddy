@@ -50,68 +50,72 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLogin() async {
-    if (!_formKey.currentState!.validate()) return;
+  if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+  setState(() {
+    _isLoading = true;
+  });
 
-    try {
-      // Check for admin credentials
-      if (_emailController.text == "admin@gmail.com" &&
-          _passwordController.text == "Admin123") {
-        setState(() {
-          _isLoading = false;
-        });
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const AdminPage()),
-        );
-        return;
-      }
-
-      // Regular user login
-      final authService = AuthService();
-      final user = await authService.login(
-        _emailController.text,
-        _passwordController.text,
-      );
-
+  try {
+    // Check for admin credentials
+    if (_emailController.text == "admin@gmail.com" &&
+        _passwordController.text == "admin1") {
+      setState(() {
+        _isLoading = false;
+      });
       if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminPage()),
+      );
+      return;
+    }
 
-      if (user != null && user['name'] != null) {
-        // Store user ID in Hive box
-        var box = Hive.box('userBox');
-        if (user.containsKey('id')) {
-          await box.put('userId', user['id']);
-        }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomePage(userName: user['name'])),
-        );
+    // Regular user login
+    final authService = AuthService();
+    final user = await authService.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    if (user != null && user['name'] != null) {
+      // Store user ID and username in Hive box
+      var box = Hive.box('userBox');
+      if (user.containsKey('id')) {
+        await box.put('userId', user['id']);
+      }
+      if (user.containsKey('name')) {
+        await box.put('username', user['name']);
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
+    } else {
+      if (user == null) {
+        _showErrorSnackBar(context, 'Email atau kata sandi tidak sesuai');
       } else {
-        if (user == null) {
-          _showErrorSnackBar(context, 'Email atau kata sandi tidak sesuai');
-        } else {
-          _showErrorSnackBar(
-            context,
-            'Terjadi kesalahan saat login. Silakan coba lagi.',
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        _showErrorSnackBar(context, 'Error: $e');
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        _showErrorSnackBar(
+          context,
+          'Terjadi kesalahan saat login. Silakan coba lagi.',
+        );
       }
     }
+  } catch (e) {
+    if (mounted) {
+      _showErrorSnackBar(context, 'Error: $e');
+    }
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
+}
+
 
   @override
 Widget build(BuildContext context) {

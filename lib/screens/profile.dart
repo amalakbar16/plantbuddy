@@ -53,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
-                                        const HomePage(userName: ''),
+                                        const HomePage(),
                                 transitionsBuilder: (
                                   context,
                                   animation,
@@ -772,7 +772,7 @@ Positioned(
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  const HomePage(userName: ''),
+                                  const HomePage(),
                           transitionsBuilder: (
                             context,
                             animation,
