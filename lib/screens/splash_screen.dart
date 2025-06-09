@@ -8,68 +8,108 @@ class SplashScreen extends StatefulWidget {
   SplashScreenState createState() => SplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Inisialisasi AnimationController
     _controller = AnimationController(
-      duration: const Duration(seconds: 2), // Durasi animasi
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
 
-    // Animasi fade
-    _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _opacityAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    // Setelah 2 detik, mulai animasi dan navigasi ke LandingPage
     Future.delayed(const Duration(seconds: 2), () {
       _controller.forward().then((value) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LandingPage()),
-        );
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LandingPage()),
+          );
+        }
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 600;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: FadeTransition( // Gunakan FadeTransition untuk animasi transisi
-          opacity: _opacityAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Perbesar ukuran logo
-              SizedBox(
-                width: 200,  // Ukuran logo diperbesar
-                height: 200, // Ukuran logo diperbesar
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Text(
-                          'Logo not found',
-                          style: TextStyle(color: Colors.red),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFEFF9F3), Color(0xFFD6F5E6), Color(0xFFC9F3DF)],
+          ),
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: FadeTransition(
+                opacity: _opacityAnimation,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Logo dengan shadow modern
+                    Container(
+                      width: isSmall ? 110 : 160,
+                      height: isSmall ? 110 : 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.green.withOpacity(0.09),
+                            blurRadius: 36,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(32),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                'Logo not found',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    // Tagline/Deskripsi singkat
+                    Text(
+                      'Teman Cerdas Perawatan Tanamanmu',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        fontSize: isSmall ? 13 : 16,
+                        color: const Color(0xFF636363),
+                        letterSpacing: 0.3,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -77,7 +117,7 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
 
   @override
   void dispose() {
-    _controller.dispose();  // Jangan lupa untuk dispose controller setelah animasi selesai
+    _controller.dispose();
     super.dispose();
   }
 }

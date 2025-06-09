@@ -40,112 +40,119 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (value) {
-                  setState(() {
-                    _currentPage = value;
-                  });
+      body: Column(
+        children: [
+          // Gambar akan benar-benar full ke atas
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (value) {
+                setState(() {
+                  _currentPage = value;
+                });
+              },
+              itemCount: _splashData.length,
+              itemBuilder: (context, index) => OnboardingContent(
+                title: _splashData[index]["title"] as String,
+                description: _splashData[index]["description"] as String,
+                backgroundColor: _splashData[index]["backgroundColor"] as Color,
+                imagePath: _splashData[index]["imagePath"] as String,
+                showBackButton: index > 0,
+                onBackPressed: () {
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease,
+                  );
                 },
-                itemCount: _splashData.length,
-                itemBuilder: (context, index) => OnboardingContent(
-                  title: _splashData[index]["title"] as String,
-                  description: _splashData[index]["description"] as String,
-                  backgroundColor:
-                      _splashData[index]["backgroundColor"] as Color,
-                  imagePath: _splashData[index]["imagePath"] as String,
-                  showBackButton: index > 0,
-                  onBackPressed: () {
-                    _pageController.previousPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  },
-                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _splashData.length,
-                  (index) => _buildDot(index: index),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  if (_currentPage == _splashData.length - 1)
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF01B14E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        'Ayo Mulai',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+          ),
+          // SafeArea di bawah, agar tombol dan dots tetap aman
+          SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _splashData.length,
+                      (index) => _buildDot(index: index),
                     ),
-                  if (_currentPage != _splashData.length - 1)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      if (_currentPage == _splashData.length - 1)
+                        ElevatedButton(
                           onPressed: () {
-                            _pageController.animateToPage(
-                              _splashData.length - 1,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
                             );
                           },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF01B14E),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                           child: const Text(
-                            "Lewati",
+                            'Ayo Mulai',
                             style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            color: Color(0xFF00B761),
-                            size: 30,
-                          ),
-                          onPressed: () {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          },
+                      if (_currentPage != _splashData.length - 1)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                _pageController.animateToPage(
+                                  _splashData.length - 1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.ease,
+                                );
+                              },
+                              child: const Text(
+                                "Lewati",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.arrow_forward,
+                                color: Color(0xFF00B761),
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                _pageController.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.ease,
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                ],
-              ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -188,6 +195,7 @@ class OnboardingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Tidak perlu SafeArea atau margin/padding atas di sini!
         Expanded(
           flex: 3,
           child: Container(
@@ -198,7 +206,8 @@ class OnboardingContent extends StatelessWidget {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            margin: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20), // margin bawah saja
+            width: double.infinity,
             child: Stack(
               children: [
                 ClipRRect(
@@ -222,14 +231,44 @@ class OnboardingContent extends StatelessWidget {
                   ),
                 ),
                 if (showBackButton)
-                  Positioned(
-                    left: 16,
-                    top: 16,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Color(0xFF00B761)),
-                      onPressed: onBackPressed,
-                    ),
-                  ),
+  Positioned(
+    left: 16,
+    top: 50,
+    child: Material(
+      color: Colors.white, // background putih
+      shape: const CircleBorder(),
+      elevation: 3, // efek raised/shadow tipis
+      child: InkWell(
+        borderRadius: BorderRadius.circular(30),
+        onTap: onBackPressed,
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: const Color(0xFF00B761),
+              width: 1.3,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x2200B761),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: Color(0xFF00B761),
+            size: 26,
+          ),
+        ),
+      ),
+    ),
+  ),
+
               ],
             ),
           ),
@@ -239,6 +278,7 @@ class OnboardingContent extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   title,
