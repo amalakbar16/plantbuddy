@@ -59,111 +59,96 @@ class ArticleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 346,
-            height: 161,
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 2,
-                  top: 0,
-                  child: Container(
-                    width: 344,
-                    height: 161,
-                    decoration: ShapeDecoration(
-                      color: const Color(0x4C1D1D1D),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  child: Container(
-                    width: 344,
-                    height: 161,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 1,
-                          color: Color(0xFF9FCFCA),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Article Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Indicator
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF01B14E).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.local_florist_outlined,
+                                size: 12,
+                                color: const Color(0xFF01B14E),
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Tanaman',
+                                style: TextStyle(
+                                  color: const Color(0xFF01B14E),
+                                  fontSize: 10,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+                        const Spacer(),
+                        Text(
+                          _formatPublishedDate(article['published_date'], article['created_at']),
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 10,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Positioned(
-                  left: 19,
-                  top: 33,
-                  child: SizedBox(
-                    width: 188,
-                    height: 39,
-                    child: Text(
+                    const SizedBox(height: 10),
+                    
+                    // Article Title
+                    Text(
                       article['title'] ?? 'No Title',
                       style: const TextStyle(
                         color: Color(0xFF2E2E2E),
-                        fontSize: 12,
+                        fontSize: 14,
                         fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                        height: 1.5,
+                        fontWeight: FontWeight.w700,
+                        height: 1.4,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ),
-                Positioned(
-                  left: 301,
-                  top: 134,
-                  child: Container(
-                    width: 25.25,
-                    height: 16.66,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    child: Stack(),
-                  ),
-                ),
-            Positioned(
-              left: 19,
-              top: 75,
-              child: SizedBox(
-                width: 188.31,
-                height: 12,
-                child: Text(
-                  _formatPublishedDate(article['published_date'], article['created_at']),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 8,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w400,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-            ),
-                Positioned(
-                  left: 17,
-                  top: 104,
-                  child: SizedBox(
-                    width: 190,
-                    height: 40,
-                    child: Text(
+                    const SizedBox(height: 8),
+                    
+                    // Article Preview
+                    Text(
                       article['content'] != null && article['content'].toString().length > 100
                           ? '${article['content'].toString().substring(0, 100)}...'
                           : article['content']?.toString() ?? 'No content',
-                      style: const TextStyle(
-                        color: Color(0xFF888888),
-                        fontSize: 10,
+                      style: TextStyle(
+                        color: const Color(0xFF888888),
+                        fontSize: 12,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w400,
                         height: 1.5,
@@ -171,38 +156,73 @@ class ArticleCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                    
+                    const SizedBox(height: 12),
+                    
+                    // Read Button
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF01B14E),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'Baca Artikel',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.bookmark_border_rounded,
+                          size: 18,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Positioned(
-                  left: 17,
-                  top: 11.96,
-                  child: Icon(
-                    Icons.local_florist_outlined,
-                    size: 15,
-                    color: const Color(0xFF01B14E),
+              ),
+              
+              const SizedBox(width: 16),
+              
+              // Article Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-            Positioned(
-              left: 214,
-              top: 18,
-              child: Container(
-                width: 116,
-                height: 79,
-                decoration: ShapeDecoration(
-                  image: DecorationImage(
+                  child: Image(
                     image: _getImageProvider(article['image_data']),
                     fit: BoxFit.cover,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey[400],
+                          size: 24,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-            ),
-              ],
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -215,15 +235,32 @@ class ArticlePage extends StatefulWidget {
   State<ArticlePage> createState() => _ArticlePageState();
 }
 
-class _ArticlePageState extends State<ArticlePage> {
+class _ArticlePageState extends State<ArticlePage> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> articles = [];
   bool isLoading = true;
   String? errorMessage;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
     _loadArticles();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadArticles() async {
@@ -252,6 +289,8 @@ class _ArticlePageState extends State<ArticlePage> {
         articles = fetchedArticles;
         isLoading = false;
       });
+      
+      _animationController.forward();
     } catch (e) {
       print('Error loading articles: $e');
       if (!mounted) return;
@@ -267,323 +306,109 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const Group4035(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Artikel Terbaru',
-                              style: TextStyle(
-                                color: Color(0xFF2E2E2E),
-                                fontSize: 17,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle see all articles
-                              },
-                              child: const Text(
-                                'Lihat Semua',
-                                style: TextStyle(
-                                  color: Color(0xFF888888),
-                                  fontSize: 13,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      if (isLoading)
-                        const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xFF01B14E),
-                          ),
-                        )
-                      else if (errorMessage != null)
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                errorMessage!,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 16,
-                                  fontFamily: 'Montserrat',
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: _loadArticles,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFF01B14E),
-                                ),
-                                child: const Text('Retry'),
-                              ),
-                            ],
-                          ),
-                        )
-                      else if (articles.isEmpty)
-                        Center(
-                          child: Text(
-                            'No articles available',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Montserrat',
-                            ),
-                          ),
-                        )
-                      else
-                        ...articles.map((article) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                          child: ArticleCard(
-                            article: article,
-                            onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => DetailArticlePage(article: article),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInOut,
-                            );
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
-                            var slideAnim = Tween(
-                              begin: const Offset(0.0, 0.1),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(curve);
-                            return FadeTransition(
-                              opacity: fadeAnim,
-                              child: SlideTransition(
-                                position: slideAnim,
-                                child: child,
-                              ),
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 400),
-                        ),
-                      );
-                            },
-                          ),
-                        )).toList(),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
+      backgroundColor: const Color(0xFFF8FAFB),
+      body: RefreshIndicator(
+        onRefresh: _loadArticles,
+        color: const Color(0xFF01B14E),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // Header with Search
+                _buildHeader(),
+                
+                // Articles List
+                Expanded(
+                  child: _buildArticlesList(),
                 ),
-              ),
-            ],
+              ],
+            ),
+            
+            // Original Bottom Navigation Bar
+            _buildOriginalBottomNavigationBar(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Header with Search
+  Widget _buildHeader() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF01B14E), Color(0xFF009E44)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF01B14E).withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
-          // Fixed bottom navigation bar
-          Positioned(
-            left: 0,
-            bottom: 0,
-            right: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 84,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+        ],
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
+      child: Column(
+        children: [
+          // Title
+          const Text(
+            'Artikel',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 20),
+          
+          // Search Bar
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 2,
-                    offset: Offset(0, 0),
-                    spreadRadius: 0.50,
-                  )
-                ],
+              ],
+            ),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Cari artikel...',
+                hintStyle: TextStyle(
+                  color: Colors.grey[400],
+                  fontFamily: 'Montserrat',
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.grey[400],
+                ),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        color: Colors.grey[400],
+                        onPressed: () {
+                          _searchController.clear();
+                        },
+                      )
+                    : null,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInOut,
-                            );
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
-                            var slideAnim = Tween(
-                              begin: const Offset(0.0, 0.1),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(curve);
-                            return FadeTransition(
-                              opacity: fadeAnim,
-                              child: SlideTransition(
-                                position: slideAnim,
-                                child: child,
-                              ),
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 400),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          CupertinoIcons.house_fill,
-                          color: Color(0xFFD1D1D1),
-                          size: 24,
-                        ),
-                        const Text(
-                          'Beranda',
-                          style: TextStyle(
-                            color: Color(0xFFD1D1D1),
-                            fontSize: 12,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            height: 2.17,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => Kebunku(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInOut,
-                            );
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
-                            var slideAnim = Tween(
-                              begin: const Offset(0.0, 0.1),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(curve);
-                            return FadeTransition(
-                              opacity: fadeAnim,
-                              child: SlideTransition(
-                                position: slideAnim,
-                                child: child,
-                              ),
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 400),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(
-                          CupertinoIcons.leaf_arrow_circlepath,
-                          color: Color(0xFFD1D1D1),
-                          size: 24,
-                        ),
-                        Text(
-                          'Kebunku',
-                          style: TextStyle(
-                            color: Color(0xFFD1D1D1),
-                            fontSize: 12,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            height: 2.17,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
-                        CupertinoIcons.doc_text_fill,
-                        color: Color(0xFF01B14E),
-                        size: 24,
-                      ),
-                      Text(
-                        'Artikel',
-                        style: TextStyle(
-                          color: Color(0xFF01B14E),
-                          fontSize: 12,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                          height: 2.17,
-                        ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const ProfilePage(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeInOut,
-                            );
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
-                            var slideAnim = Tween(
-                              begin: const Offset(0.0, 0.1),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(curve);
-                            return FadeTransition(
-                              opacity: fadeAnim,
-                              child: SlideTransition(
-                                position: slideAnim,
-                                child: child,
-                              ),
-                            );
-                          },
-                          transitionDuration: const Duration(milliseconds: 400),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(
-                          CupertinoIcons.person_fill,
-                          color: Color(0xFFD1D1D1),
-                          size: 24,
-                        ),
-                        Text(
-                          'Profil',
-                          style: TextStyle(
-                            color: Color(0xFFD1D1D1),
-                            fontSize: 12,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            height: 2.17,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              style: const TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 14,
               ),
             ),
           ),
@@ -591,125 +416,384 @@ class _ArticlePageState extends State<ArticlePage> {
       ),
     );
   }
-}
 
-class Group4035 extends StatelessWidget {
-  const Group4035({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 179,
-          child: Stack(
+  // Articles List
+  Widget _buildArticlesList() {
+    if (isLoading) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Color(0xFF01B14E),
+              strokeWidth: 3,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Memuat artikel...',
+              style: TextStyle(
+                color: Color(0xFF888888),
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    if (errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              size: 60,
+              color: Colors.red[300],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              errorMessage!,
+              style: TextStyle(
+                color: Colors.red[300],
+                fontSize: 16,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: _loadArticles,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Coba Lagi'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF01B14E),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    if (articles.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.article_outlined,
+              size: 60,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Belum ada artikel',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Artikel akan ditampilkan di sini',
+              style: TextStyle(
+                color: Colors.grey[500],
+                fontSize: 14,
+                fontFamily: 'Montserrat',
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+        children: [
+          // Section Title
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 179,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFF01B14E),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        bottomRight: Radius.circular(40),
+              const Text(
+                'Artikel Terbaru',
+                style: TextStyle(
+                  color: Color(0xFF2E2E2E),
+                  fontSize: 18,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF888888),
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(0, 0),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Lihat Semua',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 166,
-                top: 76,
-                child: Text(
-                  'Artikel',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.w600,
-                    height: 1,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 30,
-                top: 118,
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 36,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                        decoration: ShapeDecoration(
-                          color: const Color(0xEDFAFAFA),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: const Color(0x993C3C43),
-                                size: 24,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: TextField(
-                                  cursorColor: const Color(0xFF01B14E),
-                                  textAlignVertical: TextAlignVertical.center,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    focusedBorder: InputBorder.none,
-                                    enabledBorder: InputBorder.none,
-                                    hintText: 'Cari',
-                                    hintStyle: const TextStyle(
-                                      color: Color(0x993C3C43),
-                                      fontSize: 17,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w400,
-                                      height: 1,
-                                      letterSpacing: -0.41,
-                                    ),
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.zero,
-                                  ),
-                                  style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 17,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w400,
-                                    height: 1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.arrow_forward_ios, size: 12),
+                  ],
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          
+          // Articles
+          ...articles.map((article) => ArticleCard(
+            article: article,
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => DetailArticlePage(article: article),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var curve = CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeInOut,
+                    );
+                    var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                    var slideAnim = Tween(
+                      begin: const Offset(0.0, 0.1),
+                      end: const Offset(0.0, 0.0),
+                    ).animate(curve);
+                    return FadeTransition(
+                      opacity: fadeAnim,
+                      child: SlideTransition(
+                        position: slideAnim,
+                        child: child,
+                      ),
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 400),
+                ),
+              );
+            },
+          )).toList(),
+        ],
+      ),
+    );
+  }
+
+  // Original Bottom Navigation Bar
+  Widget _buildOriginalBottomNavigationBar() {
+    return Positioned(
+      left: 0,
+      bottom: 0,
+      right: 0,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 84,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          shadows: const [
+            BoxShadow(
+              color: Color(0x3F000000),
+              blurRadius: 2,
+              offset: Offset(0, 0),
+              spreadRadius: 0.50,
+            )
+          ],
         ),
-      ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      var curve = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      );
+                      var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                      var slideAnim = Tween(
+                        begin: const Offset(0.0, 0.1),
+                        end: const Offset(0.0, 0.0),
+                      ).animate(curve);
+                      return FadeTransition(
+                        opacity: fadeAnim,
+                        child: SlideTransition(
+                          position: slideAnim,
+                          child: child,
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    CupertinoIcons.house_fill,
+                    color: Color(0xFFD1D1D1),
+                    size: 24,
+                  ),
+                  Text(
+                    'Beranda',
+                    style: TextStyle(
+                      color: Color(0xFFD1D1D1),
+                      fontSize: 12,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                      height: 2.17,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => Kebunku(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      var curve = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      );
+                      var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                      var slideAnim = Tween(
+                        begin: const Offset(0.0, 0.1),
+                        end: const Offset(0.0, 0.0),
+                      ).animate(curve);
+                      return FadeTransition(
+                        opacity: fadeAnim,
+                        child: SlideTransition(
+                          position: slideAnim,
+                          child: child,
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    CupertinoIcons.leaf_arrow_circlepath,
+                    color: Color(0xFFD1D1D1),
+                    size: 24,
+                  ),
+                  Text(
+                    'Kebunku',
+                    style: TextStyle(
+                      color: Color(0xFFD1D1D1),
+                      fontSize: 12,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                      height: 2.17,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(
+                  CupertinoIcons.doc_text_fill,
+                  color: Color(0xFF01B14E),
+                  size: 24,
+                ),
+                Text(
+                  'Artikel',
+                  style: TextStyle(
+                    color: Color(0xFF01B14E),
+                    fontSize: 12,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                    height: 2.17,
+                  ),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => const ProfilePage(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      var curve = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      );
+                      var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                      var slideAnim = Tween(
+                        begin: const Offset(0.0, 0.1),
+                        end: const Offset(0.0, 0.0),
+                      ).animate(curve);
+                      return FadeTransition(
+                        opacity: fadeAnim,
+                        child: SlideTransition(
+                          position: slideAnim,
+                          child: child,
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    CupertinoIcons.person_fill,
+                    color: Color(0xFFD1D1D1),
+                    size: 24,
+                  ),
+                  Text(
+                    'Profil',
+                    style: TextStyle(
+                      color: Color(0xFFD1D1D1),
+                      fontSize: 12,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                      height: 2.17,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
