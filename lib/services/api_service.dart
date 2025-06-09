@@ -391,4 +391,133 @@ class ApiService {
       throw Exception('Failed to delete plant: $e');
     }
   }
+
+  // JADWAL MANAGEMENT
+  static Future<Map<String, dynamic>> addSchedule({
+    required int userId,
+    required int plantId,
+    required String repeatType, // contoh: "Setiap Hari", "2 Hari Sekali", dst
+    required String time, // format "HH:mm"
+    required bool reminderEnabled,
+  }) async {
+    try {
+      final Map<String, dynamic> data = {
+        'user_id': userId,
+        'plant_id': plantId,
+        'repeat_type': repeatType,
+        'time': time,
+        'reminder_enabled': reminderEnabled ? 1 : 0,
+      };
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/schedules/add_schedules.php'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: json.encode(data),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Gagal menyimpan jadwal: Status code ${response.statusCode}',
+        );
+      }
+
+      final responseData = json.decode(response.body);
+      if (responseData['success'] != true) {
+        throw Exception(responseData['message'] ?? 'Gagal menyimpan jadwal');
+      }
+
+      return responseData;
+    } catch (e) {
+      print('Error addSchedule: $e');
+      throw Exception('Gagal menyimpan jadwal: $e');
+    }
+  }
+
+  // GET JADWAL (per user)
+static Future<List<Map<String, dynamic>>> getSchedulesForUser(int userId) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$baseUrl/schedules/get_schedules.php'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode({'user_id': userId}),
+    );
+    if (response.statusCode != 200) return [];
+    final responseData = json.decode(response.body);
+    if (responseData['success'] != true || responseData['data'] == null) return [];
+    final List<dynamic> data = responseData['data'];
+    return data.cast<Map<String, dynamic>>();
+  } catch (e) {
+    print('Error fetching schedules: $e');
+    return [];
+  }
+}
+
+//edit jadwal
+static Future<bool> updateSchedule({
+  required int scheduleId,
+  required String repeatType,
+  required String? time,
+  required bool reminderEnabled,
+}) async {
+  try {
+    final Map<String, dynamic> body = {
+      "id": scheduleId,
+      "repeat_type": repeatType,
+      "time": time,
+      "reminder_enabled": reminderEnabled ? 1 : 0,
+    };
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/schedules/update_schedules.php'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final res = json.decode(response.body);
+      return res['success'] == true;
+    }
+    return false;
+  } catch (e) {
+    print('Error update schedule: $e');
+    return false;
+  }
+}
+
+// Hapus jadwal
+static Future<bool> deleteSchedule({required int scheduleId}) async {
+  try {
+    final Map<String, dynamic> body = {
+      "id": scheduleId,
+    };
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/schedules/delete_schedules.php'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final res = json.decode(response.body);
+      return res['success'] == true;
+    }
+    return false;
+  } catch (e) {
+    print('Error delete schedule: $e');
+    return false;
+  }
+}
+
 }
