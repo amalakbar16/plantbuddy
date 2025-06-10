@@ -35,7 +35,7 @@ try {
             http_response_code(200);
             echo json_encode([
                 'success' => true,
-                'message' => 'Article deleted successfully'
+                'message' => 'Artikel Berhasil Dihapus'
             ]);
         } else {
             http_response_code(404);
