@@ -103,11 +103,11 @@ class _EditKebunState extends State<EditKebun> {
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Tanaman berhasil diperbarui')),
-        );
-        Navigator.of(context).pop(true); // KEMBALIKAN TRUE!
-      }
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Tanaman berhasil diperbarui')),
+  );
+  Navigator.of(context).pop('updated'); // <--- hanya ini
+}
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -503,18 +503,8 @@ class _EditKebunState extends State<EditKebun> {
                           await ApiService.deletePlant(id: id, userId: userId);
 
                           if (mounted) {
-                            Navigator.of(context).pop(
-                              true,
-                            ); // pop dengan result true, agar list refresh
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Tanaman berhasil dihapus!'),
-                                backgroundColor: Colors.red,
-                                duration: Duration(milliseconds: 1200),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          }
+                            Navigator.of(context).pop('deleted'); 
+                                                      }
                         } catch (e) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(

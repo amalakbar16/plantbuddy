@@ -59,16 +59,18 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (isJadwalSelected) {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => const Jadwal(),
+              pageBuilder:
+                  (context, animation, secondaryAnimation) => const Jadwal(),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),
@@ -77,7 +79,9 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => const TambahKebun(),
+              pageBuilder:
+                  (context, animation, secondaryAnimation) =>
+                      const TambahKebun(),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),
@@ -165,9 +169,10 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final plant = _plants[index];
-              final imageUrl = plant['image_data'] != null && plant['image_data'].isNotEmpty
-                  ? 'data:image/${plant['image_type']};base64,${plant['image_data']}'
-                  : null;
+              final imageUrl =
+                  plant['image_data'] != null && plant['image_data'].isNotEmpty
+                      ? 'data:image/${plant['image_type']};base64,${plant['image_data']}'
+                      : null;
               return Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -177,39 +182,41 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
-                      builder: (context) => DraggableScrollableSheet(
-                        initialChildSize: 0.85,
-                        minChildSize: 0.5,
-                        maxChildSize: 0.95,
-                        expand: false,
-                        builder: (context, scrollController) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                            ),
-                            child: SingleChildScrollView(
-                              controller: scrollController,
-                              child: EditKebun(plant: plant),
-                            ),
-                          );
-                        },
-                      ),
+                      builder:
+                          (context) => DraggableScrollableSheet(
+                            initialChildSize: 0.65,
+                            minChildSize: 0.6,
+                            maxChildSize: 0.65,
+                            expand: false,
+                            builder: (context, scrollController) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
+                                ),
+                                child: SingleChildScrollView(
+                                  controller: scrollController,
+                                  child: EditKebun(plant: plant),
+                                ),
+                              );
+                            },
+                          ),
                     );
                     if (result == true) {
                       await _fetchPlants();
-                      _showAnimatedSnackbar(context, 'Tanaman berhasil diperbarui!');
+                      _showAnimatedSnackbar(
+                        context,
+                        'Tanaman berhasil diperbarui!',
+                      );
                     }
                   },
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(13),
-                      border: Border.all(
-                        color: Colors.grey.withOpacity(0.10),
-                      ),
+                      border: Border.all(color: Colors.grey.withOpacity(0.10)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.05),
@@ -227,23 +234,24 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: imageUrl != null
-                              ? Image.memory(
-                                  Uri.parse(imageUrl).data!.contentAsBytes(),
-                                  width: 54,
-                                  height: 54,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(
-                                  width: 54,
-                                  height: 54,
-                                  color: Colors.grey.shade200,
-                                  child: const Icon(
-                                    Icons.local_florist,
-                                    color: Colors.grey,
-                                    size: 28,
+                          child:
+                              imageUrl != null
+                                  ? Image.memory(
+                                    Uri.parse(imageUrl).data!.contentAsBytes(),
+                                    width: 54,
+                                    height: 54,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : Container(
+                                    width: 54,
+                                    height: 54,
+                                    color: Colors.grey.shade200,
+                                    child: const Icon(
+                                      Icons.local_florist,
+                                      color: Colors.grey,
+                                      size: 28,
+                                    ),
                                   ),
-                                ),
                         ),
                         const SizedBox(width: 13),
                         Expanded(
@@ -276,42 +284,54 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () async {
-                            final result = await showModalBottomSheet<bool>(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => DraggableScrollableSheet(
-                                initialChildSize: 0.65,
-                                minChildSize: 0.6,
-                                maxChildSize: 0.65,
-                                expand: false,
-                                builder: (context, scrollController) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: SingleChildScrollView(
-                                      controller: scrollController,
-                                      child: EditKebun(plant: plant),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                            if (result == true) {
-                              await _fetchPlants();
-                              _showAnimatedSnackbar(context, 'Tanaman berhasil diperbarui!');
-                            }
-                          },
-                          child: Icon(
-                            Icons.more_horiz,
-                            color: Colors.grey[400],
-                          ),
-                        ),
+  onTap: () async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: EditKebun(plant: plant),
+            ),
+          );
+        },
+      ),
+    );
+    if (result == 'updated') {
+      await _fetchPlants();
+      _showAnimatedSnackbar(
+        context,
+        'Tanaman berhasil diperbarui!',
+        color: const Color(0xFF01B14E), // hijau
+      );
+    } else if (result == 'deleted') {
+      await _fetchPlants();
+      _showAnimatedSnackbar(
+        context,
+        'Tanaman berhasil dihapus!',
+        color: Colors.red, // merah
+      );
+    }
+  },
+  child: Icon(
+    Icons.more_horiz,
+    color: Colors.grey[400],
+  ),
+)
+
                       ],
                     ),
                   ),
@@ -329,157 +349,161 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
       opacity: _opacity,
       duration: const Duration(milliseconds: 320),
       curve: Curves.easeInOut,
-      child: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _plants.isEmpty
+      child:
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : _plants.isEmpty
               ? Align(
-                  alignment: Alignment(0, -0.1),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 160,
-                        height: 160,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 10,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned(
-                              left: 20,
-                              top: 26,
-                              child: _circleIcon(
-                                icon: Icons.water_drop,
-                                iconColor: Colors.blue[600]!,
-                                borderColor: Colors.blue[100]!,
-                              ),
-                            ),
-                            Positioned(
-                              right: 20,
-                              top: 26,
-                              child: _circleIcon(
-                                icon: Icons.content_cut,
-                                iconColor: Colors.green[600]!,
-                                borderColor: Colors.green[100]!,
-                                rotateUp: true,
-                              ),
-                            ),
-                            Positioned(
-                              left: 55,
-                              bottom: 24,
-                              child: _circleIcon(
-                                icon: Icons.wb_sunny,
-                                iconColor: Colors.orange[700]!,
-                                borderColor: Colors.orange[100]!,
-                              ),
-                            ),
-                          ],
-                        ),
+                alignment: Alignment(0, -0.1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Tanamanmu Kosong',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 28,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w700,
-                          height: 1.2,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Kelola tanaman dengan mudah, dan\npantau pertumbuhannya.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.55),
-                          fontSize: 19,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w500,
-                          height: 1.3,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: 180,
-                        height: 60,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.black.withOpacity(0.7),
-                            side: BorderSide(
-                              width: 1.5,
-                              color: Colors.black.withOpacity(0.7),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            backgroundColor: Colors.white,
-                            textStyle: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 17,
-                              letterSpacing: -0.5,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            left: 20,
+                            top: 26,
+                            child: _circleIcon(
+                              icon: Icons.water_drop,
+                              iconColor: Colors.blue[600]!,
+                              borderColor: Colors.blue[100]!,
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation, secondaryAnimation) =>
-                                    const TambahKebun(),
-                                transitionsBuilder: (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                  child,
-                                ) {
-                                  var curve = CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeInOut,
-                                  );
-                                  var fadeAnim = Tween(
-                                    begin: 0.0,
-                                    end: 1.0,
-                                  ).animate(curve);
-                                  var slideAnim = Tween(
-                                    begin: const Offset(0.0, 0.1),
-                                    end: const Offset(0.0, 0.0),
-                                  ).animate(curve);
-                                  return FadeTransition(
-                                    opacity: fadeAnim,
-                                    child: SlideTransition(
-                                      position: slideAnim,
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                transitionDuration: const Duration(milliseconds: 400),
-                              ),
-                            );
-                          },
-                          child: const Text('Tambah Tanaman'),
-                        ),
+                          Positioned(
+                            right: 20,
+                            top: 26,
+                            child: _circleIcon(
+                              icon: Icons.content_cut,
+                              iconColor: Colors.green[600]!,
+                              borderColor: Colors.green[100]!,
+                              rotateUp: true,
+                            ),
+                          ),
+                          Positioned(
+                            left: 55,
+                            bottom: 24,
+                            child: _circleIcon(
+                              icon: Icons.wb_sunny,
+                              iconColor: Colors.orange[700]!,
+                              borderColor: Colors.orange[100]!,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildPlantList(),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Tanamanmu Kosong',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Kelola tanaman dengan mudah, dan\npantau pertumbuhannya.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.55),
+                        fontSize: 19,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w500,
+                        height: 1.3,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: 180,
+                      height: 60,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.black.withOpacity(0.7),
+                          side: BorderSide(
+                            width: 1.5,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          backgroundColor: Colors.white,
+                          textStyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const TambahKebun(),
+                              transitionsBuilder: (
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child,
+                              ) {
+                                var curve = CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeInOut,
+                                );
+                                var fadeAnim = Tween(
+                                  begin: 0.0,
+                                  end: 1.0,
+                                ).animate(curve);
+                                var slideAnim = Tween(
+                                  begin: const Offset(0.0, 0.1),
+                                  end: const Offset(0.0, 0.0),
+                                ).animate(curve);
+                                return FadeTransition(
+                                  opacity: fadeAnim,
+                                  child: SlideTransition(
+                                    position: slideAnim,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              transitionDuration: const Duration(
+                                milliseconds: 400,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('Tambah Tanaman'),
+                      ),
+                    ),
+                  ],
                 ),
+              )
+              : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildPlantList(),
+              ),
     );
   }
 
@@ -534,7 +558,10 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                           'Jadwal',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: isJadwalSelected ? Colors.black : Colors.black.withOpacity(0.5),
+                            color:
+                                isJadwalSelected
+                                    ? Colors.black
+                                    : Colors.black.withOpacity(0.5),
                             fontSize: 17,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w500,
@@ -556,7 +583,10 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                           'Tambah',
                           textAlign: TextAlign.right,
                           style: TextStyle(
-                            color: isTambahSelected ? Colors.black : Colors.black.withOpacity(0.5),
+                            color:
+                                isTambahSelected
+                                    ? Colors.black
+                                    : Colors.black.withOpacity(0.5),
                             fontSize: 17,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w500,
@@ -635,11 +665,23 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              HomePage(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(parent: animation, curve: Curves.easeInOut);
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  HomePage(),
+                          transitionsBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child,
+                          ) {
+                            var curve = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeInOut,
+                            );
+                            var fadeAnim = Tween(
+                              begin: 0.0,
+                              end: 1.0,
+                            ).animate(curve);
                             var slideAnim = Tween(
                               begin: const Offset(0.0, 0.1),
                               end: const Offset(0.0, 0.0),
@@ -702,10 +744,23 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const ArticlePage(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(parent: animation, curve: Curves.easeInOut);
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const ArticlePage(),
+                          transitionsBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child,
+                          ) {
+                            var curve = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeInOut,
+                            );
+                            var fadeAnim = Tween(
+                              begin: 0.0,
+                              end: 1.0,
+                            ).animate(curve);
                             var slideAnim = Tween(
                               begin: const Offset(0.0, 0.1),
                               end: const Offset(0.0, 0.0),
@@ -748,10 +803,23 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const ProfilePage(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var curve = CurvedAnimation(parent: animation, curve: Curves.easeInOut);
-                            var fadeAnim = Tween(begin: 0.0, end: 1.0).animate(curve);
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const ProfilePage(),
+                          transitionsBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child,
+                          ) {
+                            var curve = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeInOut,
+                            );
+                            var fadeAnim = Tween(
+                              begin: 0.0,
+                              end: 1.0,
+                            ).animate(curve);
                             var slideAnim = Tween(
                               begin: const Offset(0.0, 0.1),
                               end: const Offset(0.0, 0.0),
@@ -798,18 +866,24 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _showAnimatedSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message, style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600)),
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(milliseconds: 1200),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      backgroundColor: const Color(0xFF01B14E),
-      elevation: 6,
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-    );
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-  }
+  void _showAnimatedSnackbar(BuildContext context, String message, {Color? color}) {
+  final snackBar = SnackBar(
+    content: Text(
+      message,
+      style: const TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+    behavior: SnackBarBehavior.floating,
+    duration: const Duration(milliseconds: 1200),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    backgroundColor: color ?? const Color(0xFF01B14E),
+    elevation: 6,
+    margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+  );
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(snackBar);
+}
 }

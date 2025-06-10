@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   String? userName;
   late TabController _tabController;
-  final List<String> _categories = ['Paling Populer', 'Terdekat', 'Terbaru'];
+  final List<String> _categories = ['Paling Populer', 'Terbaru'];
   int _selectedCategoryIndex = 0;
 
   @override

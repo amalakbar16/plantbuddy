@@ -99,12 +99,11 @@ class _DetailArticlePageState extends State<DetailArticlePage> with SingleTicker
               SliverAppBar(
                 expandedHeight: 300,
                 pinned: true,
-                backgroundColor: const Color(0xFF01B14E),
                 leading: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(100),
                   ),
                   child: IconButton(
                     icon: const Icon(
@@ -143,10 +142,10 @@ class _DetailArticlePageState extends State<DetailArticlePage> with SingleTicker
                 ),
                 actions: [
                   Container(
-                    margin: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(100),
                     ),
                     child: IconButton(
                       icon: Icon(

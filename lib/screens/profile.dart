@@ -106,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(100),
                 ),
                 child: const Icon(
                   Icons.arrow_back_ios_new_rounded,
@@ -129,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(100),
               ),
               child: const Icon(
                 Icons.settings_outlined,
