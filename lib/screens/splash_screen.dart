@@ -51,7 +51,7 @@ class SplashScreenState extends State<SplashScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFEFF9F3), Color(0xFFD6F5E6), Color(0xFFC9F3DF)],
+            colors: [Color.fromARGB(255, 242, 247, 244), Color.fromARGB(255, 231, 244, 238), Color.fromARGB(255, 223, 249, 236)],
           ),
         ),
         child: Stack(
