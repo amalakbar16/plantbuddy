@@ -49,34 +49,39 @@ class _ArticleFormState extends State<ArticleForm> {
   }
 
   Future<void> _pickImage() async {
-    try {
-      final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
-      
-      if (file != null) {
-        final bytes = await file.readAsBytes();
-        final base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
-        
-        setState(() {
-          _imageBase64 = base64Image;
-          _imageName = file.name;
-        });
-        
-        logger.i('Image picked successfully: ${file.name}');
-      }
-    } catch (e) {
-      logger.e('Error picking image: $e');
-      if (mounted) {
+  try {
+    final XFile? file = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (file != null) {
+      final bytes = await file.readAsBytes();
+
+      // Validasi ukuran gambar (misalnya 10MB)
+      if (bytes.lengthInBytes > 10 * 1024 * 1024) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error picking image: $e'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
+          SnackBar(content: Text('Ukuran gambar terlalu besar, maksimal 10MB')),
         );
+        return;
       }
+
+      final base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+
+      setState(() {
+        _imageBase64 = base64Image;
+        _imageName = file.name;
+      });
+
+      logger.i('Image picked successfully: ${file.name}');
+    }
+  } catch (e) {
+    logger.e('Error picking image: $e');
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking image: $e')),
+      );
     }
   }
+}
+
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;

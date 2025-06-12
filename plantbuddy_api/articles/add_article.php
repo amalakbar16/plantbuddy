@@ -42,77 +42,77 @@ try {
         exit();
     }
 
-    // Begin transaction
+    // Check for image size and validate
+    $image_data = null;
+    $image_type = null;
+    $max_size = 10 * 1024 * 1024; // Maximum size: 10MB
+    if (isset($data['image']) && isset($data['image_name'])) {
+        $image = $data['image'];
+        
+        // Get image size in bytes
+        $image_size = strlen($image);
+        if ($image_size > $max_size) {
+            throw new Exception("Image size exceeds the maximum limit of 10MB");
+        }
+
+        // Extract image type from base64 string
+        if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+            $image_type = strtolower($type[1]); // jpg, png, etc.
+            $image = preg_replace('/^data:image\/\w+;base64,/', '', $image);
+        }
+        
+        // Decode base64 data
+        $image_data = base64_decode($image);
+        if ($image_data === false) {
+            throw new Exception("Failed to decode base64 image data");
+        }
+    }
+
+    // Begin transaction to ensure integrity
     $conn->beginTransaction();
 
-    try {
-        $image_data = null;
-        $image_type = null;
-        
-        // Handle image upload if present
-        if (isset($data['image']) && isset($data['image_name'])) {
-            $image = $data['image'];
-            
-            // Extract image type from base64 string
-            if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
-                $image_type = strtolower($type[1]); // jpg, png, etc.
-                $image = preg_replace('/^data:image\/\w+;base64,/', '', $image);
-            }
-            
-            // Decode base64 data
-            $image_data = base64_decode($image);
-            if ($image_data === false) {
-                throw new Exception("Failed to decode base64 image data");
-            }
-        }
-
-        // Prepare the insert query with image data
-        $query = "INSERT INTO articles (title, content, published_date, image_data, image_type) 
-                 VALUES (:title, :content, :published_date, :image_data, :image_type)";
-        
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            throw new Exception("Failed to prepare SQL statement");
-        }
-        
-        // Set default published_date if not provided
-        $published_date = isset($data['published_date']) ? $data['published_date'] : date('Y-m-d H:i:s');
-        
-        // Bind parameters
-        $stmt->bindParam(':title', $data['title']);
-        $stmt->bindParam(':content', $data['content']);
-        $stmt->bindParam(':published_date', $published_date);
-        $stmt->bindParam(':image_data', $image_data, PDO::PARAM_LOB);
-        $stmt->bindParam(':image_type', $image_type);
-        
-        // Execute the query
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to execute SQL statement: " . implode(", ", $stmt->errorInfo()));
-        }
-        
-        $article_id = $conn->lastInsertId();
-        
-        // Commit transaction
-        $conn->commit();
-        
-        // Return success response
-        echo json_encode([
-            'success' => true,
-            'message' => 'Article created successfully',
-            'id' => $article_id,
-            'data' => [
-                'title' => $data['title'],
-                'content' => $data['content'],
-                'published_date' => $published_date,
-                'has_image' => ($image_data !== null)
-            ]
-        ]);
-
-    } catch (Exception $e) {
-        // Rollback transaction on error
-        $conn->rollBack();
-        throw $e;
+    // Prepare the insert query with image data
+    $query = "INSERT INTO articles (title, content, published_date, image_data, image_type) 
+             VALUES (:title, :content, :published_date, :image_data, :image_type)";
+    
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        throw new Exception("Failed to prepare SQL statement");
     }
+    
+    // Set default published_date if not provided
+    $published_date = isset($data['published_date']) ? $data['published_date'] : date('Y-m-d H:i:s');
+    
+    // Bind parameters
+    $stmt->bindParam(':title', $data['title']);
+    $stmt->bindParam(':content', $data['content']);
+    $stmt->bindParam(':published_date', $published_date);
+    $stmt->bindParam(':image_data', $image_data, PDO::PARAM_LOB);
+    $stmt->bindParam(':image_type', $image_type);
+    
+    // Execute the query
+    if (!$stmt->execute()) {
+        $conn->rollBack();  // Rollback if execution fails
+        throw new Exception("Failed to execute SQL statement: " . implode(", ", $stmt->errorInfo()));
+    }
+    
+    $article_id = $conn->lastInsertId();
+    
+    // Commit transaction
+    $conn->commit();
+    
+    // Return success response
+    echo json_encode([
+        'success' => true,
+        'message' => 'Article created successfully',
+        'id' => $article_id,
+        'data' => [
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'published_date' => $published_date,
+            'has_image' => ($image_data !== null)
+        ]
+    ]);
 
 } catch(PDOException $e) {
     error_log("PDO Error: " . $e->getMessage());
@@ -123,6 +123,7 @@ try {
     ]);
 } catch(Exception $e) {
     error_log("General Error: " . $e->getMessage());
+    $conn->rollBack();  // Ensure rollback if an exception occurs
     http_response_code(500);
     echo json_encode([
         'error' => 'Error: ' . $e->getMessage(),
