@@ -335,7 +335,7 @@ class _JadwalState extends State<Jadwal> with SingleTickerProviderStateMixin {
                         Expanded(
                           child:
                               filteredSchedules.isEmpty
-                                  ? const JadwalKosong()
+                                  ? JadwalKosong(onRefresh: _fetchSchedules)
                                   : ListJadwal(
                                     schedules: filteredSchedules,
                                     onRefresh: _fetchSchedules,

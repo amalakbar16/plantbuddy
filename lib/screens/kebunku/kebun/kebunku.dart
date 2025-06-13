@@ -178,7 +178,7 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(13),
                   onTap: () async {
-                    final result = await showModalBottomSheet<bool>(
+                    final result = await showModalBottomSheet<String>(
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
@@ -204,11 +204,19 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
                             },
                           ),
                     );
-                    if (result == true) {
+                    if (result == 'updated') {
                       await _fetchPlants();
                       _showAnimatedSnackbar(
                         context,
                         'Tanaman berhasil diperbarui!',
+                        color: const Color(0xFF01B14E),
+                      );
+                    } else if (result == 'deleted') {
+                      await _fetchPlants();
+                      _showAnimatedSnackbar(
+                        context,
+                        'Tanaman berhasil dihapus!',
+                        color: Colors.red,
                       );
                     }
                   },
@@ -290,9 +298,9 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.85,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
+        initialChildSize: 0.7,
+        minChildSize: 0.65,
+        maxChildSize: 0.7,
         expand: false,
         builder: (context, scrollController) {
           return Container(
@@ -867,18 +875,33 @@ class _KebunkuState extends State<Kebunku> with SingleTickerProviderStateMixin {
   }
 
   void _showAnimatedSnackbar(BuildContext context, String message, {Color? color}) {
+  final backgroundColor = color ?? const Color(0xFF01B14E);
+  final isSuccess = backgroundColor == Colors.green || backgroundColor == const Color(0xFF01B14E);
+  final isError = backgroundColor == Colors.red;
+  
   final snackBar = SnackBar(
-    content: Text(
-      message,
-      style: const TextStyle(
-        fontFamily: 'Montserrat',
-        fontWeight: FontWeight.w600,
-      ),
+    content: Row(
+      children: [
+        Icon(
+          isError ? Icons.error : (isSuccess ? Icons.check_circle : Icons.info),
+          color: Colors.white,
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            message,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     ),
     behavior: SnackBarBehavior.floating,
     duration: const Duration(milliseconds: 1200),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    backgroundColor: color ?? const Color(0xFF01B14E),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    backgroundColor: backgroundColor,
     elevation: 6,
     margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
   );

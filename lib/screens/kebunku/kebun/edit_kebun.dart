@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:plantbuddy/services/api_service.dart';
 import 'package:hive/hive.dart';
@@ -103,15 +104,32 @@ class _EditKebunState extends State<EditKebun> {
       );
 
       if (mounted) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Tanaman berhasil diperbarui')),
-  );
-  Navigator.of(context).pop('updated'); // <--- hanya ini
-}
+        Navigator.of(context).pop('updated');
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memperbarui tanaman: $e')),
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error, color: Colors.white),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Gagal memperbarui tanaman: $e',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: Duration(seconds: 3),
+          ),
         );
       }
     } finally {
@@ -503,13 +521,31 @@ class _EditKebunState extends State<EditKebun> {
                           await ApiService.deletePlant(id: id, userId: userId);
 
                           if (mounted) {
-                            Navigator.of(context).pop('deleted'); 
-                                                      }
+                            Navigator.of(context).pop('deleted');
+                          }
                         } catch (e) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Gagal menghapus tanaman: $e'),
+                                content: Row(
+                                  children: [
+                                    Icon(Icons.error, color: Colors.white),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        'Gagal menghapus tanaman: $e',
+                                        style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                duration: Duration(seconds: 3),
                               ),
                             );
                           }

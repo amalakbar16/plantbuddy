@@ -27,13 +27,30 @@ class _EditJadwalState extends State<EditJadwal> {
 
     // Parsing repeat_type ke List<String>
     String repeatTypeRaw = widget.jadwal['repeat_type'] ?? 'Setiap Hari';
+    print('DEBUG: Raw repeat_type dari database: "$repeatTypeRaw"');
+    
     if (repeatTypeRaw.toLowerCase().replaceAll(' ', '') == 'setiaphari') {
       repeatDays = List.from(allDays);
     } else {
-      repeatDays = repeatTypeRaw.split(',')
-          .map((d) => d.trim().isNotEmpty ? _capitalize(d.trim()) : null)
-          .whereType<String>()
-          .toList();
+      // Split dan normalize setiap hari
+      List<String> rawDays = repeatTypeRaw.split(',');
+      print('DEBUG: Hari-hari setelah split: $rawDays');
+      
+      repeatDays = [];
+      for (String day in rawDays) {
+        String cleanDay = day.trim();
+        // Hapus kata 'Setiap' jika ada di awal
+        if (cleanDay.toLowerCase().startsWith('setiap ')) {
+          cleanDay = cleanDay.substring(7).trim();
+        }
+        
+        String? normalizedDay = _normalizeDay(cleanDay);
+        if (normalizedDay != null && allDays.contains(normalizedDay)) {
+          repeatDays.add(normalizedDay);
+        }
+      }
+      
+      print('DEBUG: Hari-hari setelah normalisasi: $repeatDays');
     }
 
     selectedTime = _parseTime(widget.jadwal['time']);
@@ -42,6 +59,29 @@ class _EditJadwalState extends State<EditJadwal> {
 
   String _capitalize(String s) =>
       s.isEmpty ? s : s[0].toUpperCase() + s.substring(1).toLowerCase();
+
+  String? _normalizeDay(String day) {
+    // Mapping berbagai format nama hari ke format yang konsisten
+    final dayMap = {
+      'senin': 'Senin',
+      'selasa': 'Selasa', 
+      'rabu': 'Rabu',
+      'kamis': 'Kamis',
+      'jumat': 'Jumat',
+      'sabtu': 'Sabtu',
+      'minggu': 'Minggu',
+      'SENIN': 'Senin',
+      'SELASA': 'Selasa',
+      'RABU': 'Rabu', 
+      'KAMIS': 'Kamis',
+      'JUMAT': 'Jumat',
+      'SABTU': 'Sabtu',
+      'MINGGU': 'Minggu',
+    };
+    
+    String cleanDay = day.trim();
+    return dayMap[cleanDay] ?? _capitalize(cleanDay);
+  }
 
   TimeOfDay _parseTime(String? time) {
     if (time == null || time.isEmpty) return const TimeOfDay(hour: 7, minute: 0);
@@ -146,7 +186,27 @@ class _EditJadwalState extends State<EditJadwal> {
   Future<void> _onSave() async {
     if (repeatDays.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Pilih minimal satu hari pengulangan!")),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Pilih minimal satu hari pengulangan!",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
       );
       return;
     }
@@ -165,14 +225,54 @@ class _EditJadwalState extends State<EditJadwal> {
     setState(() => isLoading = false);
 
     if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Jadwal berhasil diupdate!",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
+      );
       if (widget.onUpdated != null) widget.onUpdated!();
       Navigator.pop(context, true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Jadwal berhasil diupdate!")),
-      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Gagal update jadwal")),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Gagal update jadwal",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
       );
     }
   }
@@ -196,14 +296,54 @@ class _EditJadwalState extends State<EditJadwal> {
     setState(() => isLoading = false);
 
     if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.delete, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Jadwal berhasil dihapus!",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
+      );
       if (widget.onUpdated != null) widget.onUpdated!();
       Navigator.pop(context, true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Jadwal berhasil dihapus!")),
-      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Gagal hapus jadwal")),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Gagal hapus jadwal",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
       );
     }
   }

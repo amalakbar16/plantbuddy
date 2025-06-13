@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'tambah_jadwal.dart';
 
 class JadwalKosong extends StatelessWidget {
-  const JadwalKosong({super.key});
+  final VoidCallback? onRefresh;
+  
+  const JadwalKosong({super.key, this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class JadwalKosong extends StatelessWidget {
   }
 
   void _showTambahJadwalModal(BuildContext context) async {
-    await showModalBottomSheet<bool>(
+    final result = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -102,5 +104,10 @@ class JadwalKosong extends StatelessWidget {
         },
       ),
     );
+    
+    // Refresh data jika jadwal berhasil ditambahkan
+    if (result == true && onRefresh != null) {
+      onRefresh!();
+    }
   }
 }

@@ -36,8 +36,26 @@ class _TambahJadwalState extends State<TambahJadwal> {
         _pengulangan.isEmpty ||
         _selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Lengkapi data jadwal sebelum menyimpan!"),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Lengkapi data jadwal sebelum menyimpan!",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
         ),
       );
       return;
@@ -57,13 +75,53 @@ class _TambahJadwalState extends State<TambahJadwal> {
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Jadwal berhasil disimpan!")),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Jadwal berhasil disimpan!",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
       );
       Navigator.pop(context, true);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal menyimpan jadwal: $e")),
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Gagal menyimpan jadwal: $e",
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
       );
     } finally {
       if (mounted) setState(() => _saving = false);

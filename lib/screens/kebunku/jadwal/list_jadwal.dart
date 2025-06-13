@@ -43,7 +43,11 @@ class _ListJadwalState extends State<ListJadwal> {
   // Handler checklist berubah
   void _onChecklistChanged() {
     setState(() {});
-      }
+    // Refresh parent component agar komponen Tanggal juga ter-update
+    if (widget.onRefresh != null) {
+      widget.onRefresh!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

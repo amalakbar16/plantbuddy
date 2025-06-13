@@ -45,14 +45,34 @@ class _TanggalState extends State<Tanggal> {
     if (widget.schedules.isEmpty) return false;
     if (checklistBox == null || !checklistBox!.isOpen) return false;
 
+    // Jangan tampilkan titik untuk hari yang sudah lewat
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final targetDate = DateTime(date.year, date.month, date.day);
+    
+    if (targetDate.isBefore(today)) {
+      return false;
+    }
+
     // Hanya tampilkan jika ada jadwal di hari tsb
     bool hasActiveUnfinished = false;
     for (final jadwal in widget.schedules) {
       // Periksa apakah jadwal berlaku di hari ini
-      final repeatRaw = (jadwal['repeat_type'] ?? '').toString().toLowerCase().replaceAll(' ', '');
+      final repeatType = (jadwal['repeat_type'] ?? '').toString().toLowerCase();
       final selectedDay = _getIndonesianDay(date.weekday);
-      if (repeatRaw.contains('setiaphari') ||
-          repeatRaw.split(',').contains(selectedDay)) {
+      
+      // Cek apakah jadwal berlaku untuk hari ini
+      bool appliesToday = false;
+      if (repeatType.contains('setiap hari')) {
+        appliesToday = true;
+      } else {
+        // Hapus kata "setiap" dan bersihkan string
+        String cleanedRepeat = repeatType.replaceAll('setiap ', '').replaceAll(' ', '');
+        List<String> days = cleanedRepeat.split(',');
+        appliesToday = days.contains(selectedDay);
+      }
+      
+      if (appliesToday) {
         // Reminder harus aktif!
         if ((jadwal['reminder_enabled'] ?? 0) == 1) {
           int id = jadwal['id'] ?? 0;

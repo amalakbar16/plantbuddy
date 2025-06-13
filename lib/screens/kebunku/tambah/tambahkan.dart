@@ -50,8 +50,28 @@ class _TambahkanWidgetState extends State<TambahkanWidget> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memuat User ID. Silakan login ulang.')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Gagal memuat User ID. Silakan login ulang.',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
+      );
       }
     }
   }
@@ -70,8 +90,28 @@ class _TambahkanWidgetState extends State<TambahkanWidget> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memilih gambar: $e')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Gagal memilih gambar: $e',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
+      );
       }
     } finally {
       setState(() => _isPicking = false);
@@ -82,16 +122,56 @@ class _TambahkanWidgetState extends State<TambahkanWidget> {
     if (_namaTanamanController.text.isEmpty || _selectedJenis == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Mohon isi semua field')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Mohon isi semua field',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
+      );
       }
       return;
     }
     if (_userId == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User ID tidak ditemukan. Silakan login ulang.')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'User ID tidak ditemukan. Silakan login ulang.',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
+      );
       }
       return;
     }
@@ -111,8 +191,28 @@ class _TambahkanWidgetState extends State<TambahkanWidget> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Tanaman berhasil ditambahkan')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Tanaman berhasil ditambahkan',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 2),
+        ),
+      );
         setState(() {
           _namaTanamanController.clear();
           _selectedJenis = null;
@@ -124,8 +224,28 @@ class _TambahkanWidgetState extends State<TambahkanWidget> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal menambahkan tanaman: $e')),
-        );
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Gagal menambahkan tanaman: $e',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          duration: Duration(seconds: 3),
+        ),
+      );
       }
     }
   }
